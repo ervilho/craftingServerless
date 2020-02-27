@@ -1,0 +1,8 @@
+{
+  "issuer": "toto",
+  "expenseDate": "value2",
+  "description": "value3",
+  "amount": 256.34,
+  "currency": "EUR",
+  "location": "Fnac"
+}
