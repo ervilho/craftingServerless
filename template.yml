@@ -1,6 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
-
 Resources:
   # SaufPompiersApi:
   #   Type: AWS::Serverless::Api
@@ -39,6 +38,9 @@ Resources:
             Path: /enter
             Method: POST
 #            RestApiId: !Ref SaufPompiersApi ## This is optional.
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: 'ExpenseTable'
 
   UpdateExpense:
       Type: AWS::Serverless::Function
@@ -66,3 +68,17 @@ Resources:
             Path: /list
             Method: GET
 
+
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: 'ExpenseTable'
+      AttributeDefinitions:
+        - AttributeName: "expenseId"
+          AttributeType: S
+       KeySchema:
+        - AttributeName: "expenseId"
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: True

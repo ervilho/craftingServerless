@@ -1,5 +1,12 @@
+const AWS = require('aws-sdk')
+
 exports.handler = async (event) => {
   console.log(event);
+
+  const client = new AWS.DynamoDB.DocumentClient();
+  const result = client.query().promise();
+  console.log(result);
+  
   const receipts = [{
     issuer : "toto1",
     expenseDate : "date1",

@@ -1,9 +1,13 @@
+const AWS = require('aws-sdk')
+const uuidv4 = require('uuid/v4')
+
 exports.handler = async (event) => {
   console.log(event);
-  var eventBody = JSON.parse(event.body);
+  const eventBody = JSON.parse(event.body);
   console.log(eventBody);
 
   const receipt = {
+    expenseId: uuidv4(),
     issuer: eventBody.issuer,
     expenseDate: eventBody.expenseDate,
     description: eventBody.description,
@@ -12,11 +16,20 @@ exports.handler = async (event) => {
     location: eventBody.location
   };
 
-  console.log(receipt);
+
+
+  const client = new AWS.DynamoDB.DocumentClient();
+  const params = {
+    TableName: "ExpenseTable",
+    Item: receipt
+  }
+  const result = await client.put(params).promise();
+  console.log(result);
+  // console.log(receipt);
 
   const response = {
     statusCode: 200,
-    body: JSON.stringify(receipt),
+    body: receipt.expenseId,
   };
 
   return response;
