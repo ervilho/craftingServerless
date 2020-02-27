@@ -1,36 +1,33 @@
-const AWS = require('aws-sdk')
-const uuidv4 = require('uuid/v4')
+const uuidv4 = require('uuid').v4
+
+exports.parser = require('./parser');
+exports.storage = require('./expenseRepository');
 
 exports.handler = async (event) => {
-  console.log(event);
-  const eventBody = JSON.parse(event.body);
-  console.log(eventBody);
-
+  const eventBody = exports.parser(event);
   const receipt = {
+    ...eventBody,
     expenseId: uuidv4(),
-    issuer: eventBody.issuer,
-    expenseDate: eventBody.expenseDate,
-    description: eventBody.description,
-    amount: eventBody.amount,
-    currency: eventBody.currency,
-    location: eventBody.location
+    // issuer: eventBody.issuer,
+    // expenseDate: eventBody.expenseDate,
+    // description: eventBody.description,
+    // amount: eventBody.amount,
+    // currency: eventBody.currency,
+    // location: eventBody.location
   };
 
-
-
-  const client = new AWS.DynamoDB.DocumentClient();
-  const params = {
-    TableName: "ExpenseTable",
-    Item: receipt
+  try {
+    await exports.storage.save(receipt);
   }
-  const result = await client.put(params).promise();
-  console.log(result);
-  // console.log(receipt);
+  catch(error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error)
+    }
+  }
 
-  const response = {
+  return {
     statusCode: 200,
     body: receipt.expenseId,
   };
-
-  return response;
 };
