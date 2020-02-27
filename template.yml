@@ -43,17 +43,17 @@ Resources:
             TableName: 'ExpenseTable'
 
   UpdateExpense:
-      Type: AWS::Serverless::Function
-      Properties:
-        Runtime: nodejs12.x
-        CodeUri: update-expense/
-        Handler: index.handler
-        Events:
-          EnterEndpoint:
-            Type: Api
-            Properties:
-              Path: /expenses/{expenseId}
-              Method: POST
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      CodeUri: update-expense/
+      Handler: index.handler
+      Events:
+        EnterEndpoint:
+          Type: Api
+          Properties:
+            Path: /expenses/{expenseId}
+            Method: POST
 
   ListExpenses:
     Type: AWS::Serverless::Function
@@ -68,7 +68,6 @@ Resources:
             Path: /list
             Method: GET
 
-
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -76,7 +75,7 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "expenseId"
           AttributeType: S
-       KeySchema:
+      KeySchema:
         - AttributeName: "expenseId"
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
