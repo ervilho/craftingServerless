@@ -2,22 +2,67 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: 'AWS::Serverless-2016-10-31'
 
 Resources:
+  # SaufPompiersApi:
+  #   Type: AWS::Serverless::Api
+  #   Properties:
+  #     StageName: prod
+  #     # DefinitionBody:
+  #     #   swagger: 2.0
+  #     #   info:
+  #     #     title:
+  #     #       Ref: AWS::StackName
+  #     #   paths:
+  #     #     /enter:
+  #     #       post:
+  #     #         parameters:
+  #     #         - name: issuer
+  #     #           in: body
+  #     #           required: true
+  #     #           type: string
+  #     #         responses: {}
+  #     #         x-amazon-apigateway-integration:
+  #     #           httpMethod: POST
+  #     #           type: aws_proxy
+  #     #           uri:
+  #     #             Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetOneLambda.Arn}/invocations
+
   EnterExpense:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs12.x
       CodeUri: enter-expense/
-      Handler: index.js
+      Handler: index.handler
+      Events:
+        EnterEndpoint:
+          Type: Api
+          Properties:
+            Path: /enter
+            Method: POST
+#            RestApiId: !Ref SaufPompiersApi ## This is optional.
+
   UpdateExpense:
-    Type: AWS::Serverless::Function
-    Properties:
-      Runtime: nodejs12.x
-      CodeUri: update-expense/
-      Handler: index.js
+      Type: AWS::Serverless::Function
+      Properties:
+        Runtime: nodejs12.x
+        CodeUri: update-expense/
+        Handler: index.handler
+        Events:
+          EnterEndpoint:
+            Type: Api
+            Properties:
+              Path: /expenses/{expenseId}
+              Method: POST
+
   ListExpenses:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs12.x
       CodeUri: list-expenses/
-      Handler: index.js
-    
+      Handler: index.handler
+      Events:
+        ListEndpoint:
+          Type: Api
+          Properties:
+            Path: /list
+            Method: GET
+
