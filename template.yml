@@ -40,7 +40,11 @@ Resources:
 #            RestApiId: !Ref SaufPompiersApi ## This is optional.
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: 'ExpenseTable'
+            TableName: !Ref ExpenseTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ExpenseTable
+          
 
   UpdateExpense:
     Type: AWS::Serverless::Function
@@ -68,10 +72,9 @@ Resources:
             Path: /list
             Method: GET
 
-  DynamoDBTable:
+  ExpenseTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: 'ExpenseTable'
       AttributeDefinitions:
         - AttributeName: "expenseId"
           AttributeType: S

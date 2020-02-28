@@ -1,6 +1,8 @@
 const uuidv4 = require('uuid').v4
 
 const {parser} = require('./parser');
+const tableName = process.env.TABLE_NAME;
+
 exports.storage = require('./expenseRepository'); // TODO: same as parse
 
 exports.handler = async (event) => {
@@ -17,7 +19,7 @@ exports.handler = async (event) => {
   };
 
   try {
-    await exports.storage.save(receipt);
+    await exports.storage.save(receipt, tableName);
   }
   catch(error) {
     return {

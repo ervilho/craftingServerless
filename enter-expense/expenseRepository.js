@@ -2,11 +2,11 @@
 const AWS = require('aws-sdk')
 
 module.exports = {
-  save: async function put(receipt) {
+  save: async function put(receipt, tableName) {
     const client = new AWS.DynamoDB.DocumentClient()
   
     const params = {
-      TableName: "ExpenseTable",
+      TableName: tableName,
       Item: receipt
     }
   
