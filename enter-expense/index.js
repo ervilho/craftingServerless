@@ -1,10 +1,10 @@
 const uuidv4 = require('uuid').v4
 
-exports.parser = require('./parser');
-exports.storage = require('./expenseRepository');
+const {parser} = require('./parser');
+exports.storage = require('./expenseRepository'); // TODO: same as parse
 
 exports.handler = async (event) => {
-  const eventBody = exports.parser(event);
+  const eventBody = parser.parse(event);
   const receipt = {
     ...eventBody,
     expenseId: uuidv4(),
