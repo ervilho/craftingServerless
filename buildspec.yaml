@@ -25,6 +25,11 @@ phases:
       # - echo "[Pre-Build phase]"
   build:
     commands:
+      - echo "Running tests"
+      - cd enter_expense
+      - npm ci
+      - npm test
+
       # Use Build phase to build your artifacts (compile, package, etc.)
       # - echo "[Build phase]"
       # We package the SAM template and create `packaged.yaml` file that will be used in our pipeline for deployment
